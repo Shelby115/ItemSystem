@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemSystem", "ItemSystem\ItemSystem.csproj", "{6A62C777-173A-4B48-9A23-43DF31751BC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemSystem.Tests", "ItemSystem.Tests\ItemSystem.Tests.csproj", "{FE0C0CE4-2FEB-4CCA-8FAA-C4D75E66E402}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameData", "GameData", "{C522AAC3-697A-477F-9D60-58369FF02C23}"
+	ProjectSection(SolutionItems) = preProject
+		ItemInteractionTypes.json = ItemInteractionTypes.json
+		ItemProperties.json = ItemProperties.json
+		ItemTypes.json = ItemTypes.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A62C777-173A-4B48-9A23-43DF31751BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A62C777-173A-4B48-9A23-43DF31751BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A62C777-173A-4B48-9A23-43DF31751BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A62C777-173A-4B48-9A23-43DF31751BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE0C0CE4-2FEB-4CCA-8FAA-C4D75E66E402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE0C0CE4-2FEB-4CCA-8FAA-C4D75E66E402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE0C0CE4-2FEB-4CCA-8FAA-C4D75E66E402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE0C0CE4-2FEB-4CCA-8FAA-C4D75E66E402}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14C837EB-9DE8-44CA-B669-114747871C19}
+	EndGlobalSection
+EndGlobal

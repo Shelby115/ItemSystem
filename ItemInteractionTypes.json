@@ -1,0 +1,17 @@
+[
+  {
+    "SourceItem": "Dagger",
+    "TargetItem": "Rope",
+    "AddedProperty": "Rope Connected"
+  },
+  {
+    "SourceItem": "Dagger",
+    "TargetItem": "Poison",
+    "AddedProperty": "Poisoned"
+  },
+  {
+    "SourceItem": "Dagger",
+    "TargetItem": "Polish",
+    "AddedProperty": "Shiny"
+  }
+]

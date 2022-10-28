@@ -1,0 +1,38 @@
+[
+  {
+    "Name": "Dagger",
+    "Description": "a small blade with a small handle"
+  },
+  {
+    "Name": "Club",
+    "Description": "a heavy stick with a thick end"
+  },
+  {
+    "Name": "Axe",
+    "Description": "a tool typically used for chopping wood"
+  },
+  {
+    "Name": "Spear",
+    "Description": "a weapon with a long shaft and a pointed tip used for thrusting or throwing"
+  },
+  {
+    "Name": "Hammer",
+    "Description": "a tool with a heavy metal head mounted at right angles at the end of a handle"
+  },
+  {
+    "Name": "Quarterstaff",
+    "Description": "a stout pole six to eight feet long"
+  },
+  {
+    "Name": "Rope",
+    "Description": "a simple rope about 10 feet long"
+  },
+  {
+    "Name": "Poison Vial",
+    "Description": "a vial of poison"
+  },
+  {
+    "Name": "Polish",
+    "Description": "a container of metal polish"
+  }
+]
