@@ -12,12 +12,12 @@ public class GameManagerTests
         var game = new GameManager();
 
         Assert.IsNotNull(game.ItemTypes);
-        Assert.AreNotEqual<int>(0, game.ItemTypes.Get().Count());
+        Assert.AreNotEqual<int>(0, game.ItemTypes.Count());
 
         Assert.IsNotNull(game.ItemProperties);
-        Assert.AreNotEqual<int>(0, game.ItemProperties.Get().Count());
+        Assert.AreNotEqual<int>(0, game.ItemProperties.Count());
 
         Assert.IsNotNull(game.ItemInteractionTypes);
-        Assert.AreNotEqual<int>(0, game.ItemInteractionTypes.Get().Count());
+        Assert.AreNotEqual<int>(0, game.ItemInteractionTypes.Count());
     }
 }

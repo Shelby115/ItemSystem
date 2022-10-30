@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace ItemSystem.Tests;
 
@@ -27,5 +28,46 @@ public class ItemTests
 
         Assert.IsNotNull(myDagger.Properties);
         Assert.AreEqual<string>("A small blade with a small handle connected to a rope.", myDagger.Description);
+    }
+
+    [TestMethod]
+    public void Item_UseWith_DoesNothing_WhenInteractionNotFound()
+    {
+        var game = new GameManager();
+        var sourceItem = new Item(new ItemType("A", "a"));
+        var targetItem = new Item(new ItemType("B", "b"));
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+        sourceItem.UseWith(game, targetItem);
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+    }
+
+    [TestMethod]
+    public void Item_UseWith_DoesNothing_WhenItemPropertyNotFound()
+    {
+        var game = new GameManager();
+        var sourceItem = new Item(new ItemType("B", "b"));
+        var targetItem = new Item(new ItemType("C", "c"));
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+        sourceItem.UseWith(game, targetItem);
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+    }
+
+    [TestMethod]
+    public void Item_UseWith_AddsProperty_WhenInteractionAndPropertyFound()
+    {
+        var game = new GameManager();
+        var sourceItem = new Item(game.ItemTypes.First(x => x.Name == "Dagger"));
+        var targetItem = new Item(game.ItemTypes.First(x => x.Name == "Rope"));
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+        sourceItem.UseWith(game, targetItem);
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+        var property = sourceItem.Properties.FirstOrDefault(x => x.Name == "Rope Connected");
+        Assert.IsNotNull(property);
     }
 }

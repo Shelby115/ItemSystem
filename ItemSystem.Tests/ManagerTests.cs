@@ -18,7 +18,7 @@ public class ManagerTests
     {
         var manager = new Manager<ItemType>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemTypes.json");
-        var results = manager.Get();
+        var results = manager.ToList();
         Assert.IsNotNull(results);
     }
 
@@ -27,7 +27,7 @@ public class ManagerTests
     {
         var manager = new Manager<ItemProperty>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemProperties.json");
-        var results = manager.Get();
+        var results = manager.ToList();
         Assert.IsNotNull(results);
     }
 
@@ -36,7 +36,7 @@ public class ManagerTests
     {
         var manager = new Manager<ItemInteractionType>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemInteractionTypes.json");
-        var results = manager.Get();
+        var results = manager.ToList();
         Assert.IsNotNull(results);
     }
 
@@ -45,11 +45,11 @@ public class ManagerTests
     {
         var manager = new Manager<ItemProperty>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemProperties.json");
-        var results = manager.Get();
+        var results = manager.ToList();
         Assert.IsNotNull(results);
         Assert.AreNotEqual(0, results.Count());
         manager.Clear();
         Assert.IsNotNull(results);
-        Assert.AreEqual<int>(0, manager.Get().Count());
+        Assert.AreEqual<int>(0, manager.Count());
     }
 }

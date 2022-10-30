@@ -2,18 +2,13 @@
 
 namespace ItemSystem;
 
-public class Manager<T> where T : class
+public class Manager<T> : IEnumerable<T> where T : class
 {
     private readonly ICollection<T> Items;
 
     public Manager()
     {
         Items = new HashSet<T>();
-    }
-
-    public IEnumerable<T> Get()
-    {
-        return Items;
     }
 
     public void Clear()
@@ -41,5 +36,15 @@ public class Manager<T> where T : class
     {
         var result = JsonSerializer.Deserialize<T[]>(json);
         return result ?? throw new ApplicationException($"Failed to parse json.");
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return Items.GetEnumerator();
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return Items.GetEnumerator();
     }
 }

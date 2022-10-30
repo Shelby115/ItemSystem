@@ -13,5 +13,10 @@
     "SourceItem": "Dagger",
     "TargetItem": "Polish",
     "AddedProperty": "Shiny"
+  },
+  {
+    "SourceItem": "B",
+    "TargetItem": "C",
+    "AddedProperty": "P"
   }
 ]
