@@ -9,7 +9,7 @@ public class ItemTests
     [TestMethod]
     public void Item_Constructor()
     {
-        var myDagger = new Item(new ItemType("Dagger", "a small blade with a small handle"));
+        var myDagger = new Item("Dagger");
         Assert.IsNotNull(myDagger);
         Assert.IsNotNull(myDagger.Type);
     }
@@ -17,7 +17,7 @@ public class ItemTests
     [TestMethod]
     public void Item_ItemProperty_Descriptions()
     {
-        var myDagger = new Item(new ItemType("Dagger", "a small blade with a small handle"));
+        var myDagger = new Item("Dagger");
 
         Assert.IsNotNull(myDagger);
         Assert.IsNotNull(myDagger.Type);
@@ -33,12 +33,12 @@ public class ItemTests
     [TestMethod]
     public void Item_UseWith_DoesNothing_WhenInteractionNotFound()
     {
-        var game = new GameManager();
+        var game = new ItemManager();
         var sourceItem = new Item(new ItemType("A", "a"));
         var targetItem = new Item(new ItemType("B", "b"));
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
-        sourceItem.UseWith(game, targetItem);
+        sourceItem.UseWith(targetItem);
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
     }
@@ -46,12 +46,12 @@ public class ItemTests
     [TestMethod]
     public void Item_UseWith_DoesNothing_WhenItemPropertyNotFound()
     {
-        var game = new GameManager();
+        var game = new ItemManager();
         var sourceItem = new Item(new ItemType("B", "b"));
         var targetItem = new Item(new ItemType("C", "c"));
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
-        sourceItem.UseWith(game, targetItem);
+        sourceItem.UseWith(targetItem);
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
     }
@@ -59,12 +59,11 @@ public class ItemTests
     [TestMethod]
     public void Item_UseWith_AddsProperty_WhenInteractionAndPropertyFound()
     {
-        var game = new GameManager();
-        var sourceItem = new Item(game.ItemTypes.First(x => x.Name == "Dagger"));
-        var targetItem = new Item(game.ItemTypes.First(x => x.Name == "Rope"));
+        var sourceItem = new Item("Dagger");
+        var targetItem = new Item("Rope");
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
-        sourceItem.UseWith(game, targetItem);
+        sourceItem.UseWith(targetItem);
         Assert.AreEqual<int>(1, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
         var property = sourceItem.Properties.FirstOrDefault(x => x.Name == "Rope Connected");

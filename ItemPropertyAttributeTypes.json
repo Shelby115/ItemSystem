@@ -1,0 +1,10 @@
+[
+    {
+        "Name": "Number of Uses",
+        "Description": "The number of times the item may be used before this item property expires."
+    },
+    {
+        "Name": "Added Poison Damage",
+        "Description": "The amount of poison damage added to attacks when using this item as a weapon."
+    }
+]

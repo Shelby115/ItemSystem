@@ -13,20 +13,26 @@ public class Item
         }
     }
 
-    public Item(ItemType type)
+    public Item(string itemTypeName)
     {
-        Type = type;
+        Type = ItemManager.Types.First(x => x.Name == itemTypeName);
         Properties = new List<ItemProperty>();
     }
 
-    public void UseWith(GameManager game, Item item)
+    public Item(ItemType itemType)
+    {
+        Type = itemType;
+        Properties = new List<ItemProperty>();
+    }
+
+    public void UseWith(Item item)
     {
         // See if it is a valid item interaction.
-        var suggestedInteraction = game.ItemInteractionTypes.FirstOrDefault(x => x.SourceItem == this.Type.Name && x.TargetItem == item.Type.Name);
+        var suggestedInteraction = ItemManager.InteractionTypes.FirstOrDefault(x => x.SourceItem == this.Type.Name && x.TargetItem == item.Type.Name);
         if (suggestedInteraction == null) { return; }
 
         // Find the resulting item property.
-        var addedProperty = game.ItemProperties.FirstOrDefault(x => x.Name == suggestedInteraction.AddedProperty);
+        var addedProperty = ItemManager.Properties.FirstOrDefault(x => x.Name == suggestedInteraction.AddedProperty);
         if (addedProperty == null) { return; }
 
         // Check if it already exists, if it does remove it before adding it again.
