@@ -1,5 +1,8 @@
-﻿namespace ItemSystem;
+﻿namespace ItemSystem.Types;
 
+/// <summary>
+/// A name and description for an item (e.g., "Dagger, a small blade with a small handle.").
+/// </summary>
 public class ItemType
 {
     public string Name { get; }

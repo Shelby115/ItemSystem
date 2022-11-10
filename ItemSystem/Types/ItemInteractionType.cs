@@ -1,4 +1,4 @@
-﻿namespace ItemSystem;
+﻿namespace ItemSystem.Types;
 
 public class ItemInteractionType
 {

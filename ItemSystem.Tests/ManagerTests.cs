@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ItemSystem.Instances;
+using ItemSystem.Types;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
 
@@ -23,10 +25,10 @@ public class ManagerTests
     }
 
     [TestMethod]
-    public void Manager_Load_ItemProperties()
+    public void Manager_Load_ItemPropertyTypes()
     {
-        var manager = new Manager<ItemProperty>();
-        manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemProperties.json");
+        var manager = new Manager<ItemPropertyType>();
+        manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemPropertyTypes.json");
         var results = manager.ToList();
         Assert.IsNotNull(results);
     }
@@ -43,8 +45,8 @@ public class ManagerTests
     [TestMethod]
     public void Manager_Load_Clear()
     {
-        var manager = new Manager<ItemProperty>();
-        manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemProperties.json");
+        var manager = new Manager<ItemPropertyType>();
+        manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemPropertyTypes.json");
         var results = manager.ToList();
         Assert.IsNotNull(results);
         Assert.AreNotEqual(0, results.Count());

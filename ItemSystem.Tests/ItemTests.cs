@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ItemSystem.Instances;
+using ItemSystem.Types;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ItemSystem.Tests;
@@ -9,25 +12,26 @@ public class ItemTests
     [TestMethod]
     public void Item_Constructor()
     {
-        var myDagger = new Item("Dagger");
-        Assert.IsNotNull(myDagger);
-        Assert.IsNotNull(myDagger.Type);
+        var item = new Item(new ItemType("Test", "test"));
+        Assert.IsNotNull(item);
+        Assert.IsNotNull(item.Type);
     }
 
     [TestMethod]
     public void Item_ItemProperty_Descriptions()
     {
-        var myDagger = new Item("Dagger");
+        var item = new Item(new ItemType("Test", "test"));
 
-        Assert.IsNotNull(myDagger);
-        Assert.IsNotNull(myDagger.Type);
-        Assert.AreEqual<string>("a small blade with a small handle", myDagger.Type.Description);
-        Assert.AreEqual<string>("A small blade with a small handle.", myDagger.Description);
+        Assert.IsNotNull(item);
+        Assert.IsNotNull(item.Type);
+        Assert.AreEqual<string>("test", item.Type.Description);
+        Assert.AreEqual<string>("Test.", item.Description);
 
-        myDagger.Properties.Add(new ItemProperty("Rope", "connected to a rope"));
+        var propertyType = new ItemPropertyType("Rope", "connected to a rope", new List<ItemPropertyAttributeTypeDefaultValue>());
+        item.Properties.Add(new ItemProperty(propertyType));
 
-        Assert.IsNotNull(myDagger.Properties);
-        Assert.AreEqual<string>("A small blade with a small handle connected to a rope.", myDagger.Description);
+        Assert.IsNotNull(item.Properties);
+        Assert.AreEqual<string>("Test connected to a rope.", item.Description);
     }
 
     [TestMethod]
@@ -59,14 +63,36 @@ public class ItemTests
     [TestMethod]
     public void Item_UseWith_AddsProperty_WhenInteractionAndPropertyFound()
     {
-        var sourceItem = new Item("Dagger");
-        var targetItem = new Item("Rope");
+        var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
         sourceItem.UseWith(targetItem);
         Assert.AreEqual<int>(1, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
-        var property = sourceItem.Properties.FirstOrDefault(x => x.Name == "Rope Connected");
+        var property = sourceItem.Properties.FirstOrDefault(x => x.PropertyType.Name == "Rope Connected");
         Assert.IsNotNull(property);
+    }
+
+    [TestMethod]
+    public void Item_UseWith_AddsPropertyWithValue_WhenInteractionAndPropertyFound()
+    {
+        var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count, "Starting source item property count.");
+        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Starting target item property count.");
+        sourceItem.UseWith(targetItem);
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Source item property count.");
+        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
+        var property = sourceItem.Properties.FirstOrDefault(x => x.PropertyType.Name == "Poisoned");
+        Assert.IsNotNull(property);
+        Assert.IsNotNull(property.Attributes, "Property attributes.");
+        Assert.AreEqual<int>(2, property.Attributes.Count, "Property attribute count.");
+        var numberOfUses = property.Attributes.FirstOrDefault(x => x.AttributeType.Name == "Number of Uses");
+        Assert.IsNotNull(numberOfUses);
+        Assert.AreEqual<int>(1, numberOfUses.Value, "Number of uses value.");
+        var addedPoisonDamage = property.Attributes.FirstOrDefault(x => x.AttributeType.Name == "Added Poison Damage");
+        Assert.IsNotNull(addedPoisonDamage);
+        Assert.AreEqual<int>(10, addedPoisonDamage.Value, "Added poison damage value.");
     }
 }

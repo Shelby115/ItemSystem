@@ -1,0 +1,31 @@
+[
+  {
+    "Name": "Rope Connected",
+    "Description": "connected to a rope",
+    "AttributeTypes": []
+  },
+  {
+    "Name": "Shiny",
+    "Description": "polished to a shine",
+    "AttributeTypes": [
+      {
+        "Name": "Number of Uses",
+        "DefaultValue": 5
+      }
+    ]
+  },
+  {
+    "Name": "Poisoned",
+    "Description": "coated in a layer of poison",
+    "AttributeTypes": [
+      {
+        "Name": "Number of Uses",
+        "DefaultValue": 1
+      },
+      {
+        "Name": "Added Poison Damage",
+        "DefaultValue": 10
+      }
+    ]
+  }
+]

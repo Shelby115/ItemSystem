@@ -1,4 +1,4 @@
-﻿namespace ItemSystem;
+﻿namespace ItemSystem.Types;
 
 /// <summary>
 /// An attribute type is simply a name and description for an item property attribute.

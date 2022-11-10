@@ -10,9 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameData", "GameData", "{C522AAC3-697A-477F-9D60-58369FF02C23}"
 	ProjectSection(SolutionItems) = preProject
 		ItemInteractionTypes.json = ItemInteractionTypes.json
-		ItemProperties.json = ItemProperties.json
-		ItemPropertyAttributes.json = ItemPropertyAttributes.json
 		ItemPropertyAttributeTypes.json = ItemPropertyAttributeTypes.json
+		ItemPropertyTypes.json = ItemPropertyTypes.json
 		ItemTypes.json = ItemTypes.json
 	EndProjectSection
 EndProject
