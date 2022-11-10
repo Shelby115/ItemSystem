@@ -10,4 +10,9 @@ public class ItemPropertyAttributeTypeDefaultValue
         Name = name;
         DefaultValue = defaultValue;
     }
+
+    public override string ToString()
+    {
+        return $"{Name} - {DefaultValue}";
+    }
 }

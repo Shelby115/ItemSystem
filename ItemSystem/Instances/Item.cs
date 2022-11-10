@@ -48,6 +48,6 @@ public class Item
 
     public override string ToString()
     {
-        return $"{Type.Name}, {Description}".Sentence();
+        return $"{Type.Name}, {this.Description}".Sentence();
     }
 }

@@ -16,4 +16,9 @@ public class ItemPropertyAttribute
         AttributeType = attributeType;
         Value = value;
     }
+
+    public override string ToString()
+    {
+        return $"{AttributeType.Name}: {Value}";
+    }
 }

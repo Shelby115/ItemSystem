@@ -19,4 +19,10 @@ public class ItemProperty
             .Select(x => new ItemPropertyAttribute(ItemManager.AttributeTypes.First(at => at.Name == x.Name), x.DefaultValue))
             .ToList();
     }
+
+    public override string ToString()
+    {
+        var attributesDescription = $" {String.Join(" ", Attributes.Select(x => "[" + x + "]"))}";
+        return $"{PropertyType.Name}{attributesDescription}".Trim();
+    }
 }
