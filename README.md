@@ -14,3 +14,9 @@ These entities are instances of type entities. They generally have one or more t
 1. ItemPropertyAttribute - An instance of an ItemPropertyAttributeType with a value associated.
 2. ItemProperty - An instance of an ItemPropertyType with a set of attributes associated.
 3. Item - An instance of an ItemType with properties associated.
+
+
+## TODO
+
+1. Add a method for easily updating the value of a property attribute (Events maybe?).
+2. Add a method for easily removing a property from an item (e.g., Number of uses reaches 0, Rope is cut or removed, Dagger is bloodied, etc).
