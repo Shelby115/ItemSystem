@@ -25,3 +25,4 @@ These entities are instances of type entities. They generally have one or more t
 4. Ability to remove a property via an interaction.
 5. Ability to require only a property for an interaction.
 6. List and Add actions based on an item's properties.
+7. ~~Add innate item properties for item types.~~
