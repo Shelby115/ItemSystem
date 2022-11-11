@@ -1,5 +1,8 @@
 ﻿namespace ItemSystem.Types;
 
+/// <summary>
+/// A defined interaction between a source and target items. Can add or remove a property.
+/// </summary>
 public class InteractionType
 {
     public string SourceItem { get; }

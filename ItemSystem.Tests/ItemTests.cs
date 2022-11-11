@@ -64,10 +64,10 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
-        Assert.AreEqual<int>(0, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
         sourceItem.UseWith(targetItem);
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count);
+        Assert.AreEqual<int>(2, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
         var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
         Assert.IsNotNull(property);
@@ -78,10 +78,10 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
-        Assert.AreEqual<int>(0, sourceItem.Properties.Count, "Starting source item property count.");
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Starting source item property count.");
         Assert.AreEqual<int>(0, targetItem.Properties.Count, "Starting target item property count.");
         sourceItem.UseWith(targetItem);
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Source item property count.");
+        Assert.AreEqual<int>(2, sourceItem.Properties.Count, "Source item property count.");
         Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
         var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Poisoned");
         Assert.IsNotNull(property);
@@ -100,10 +100,10 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
-        Assert.AreEqual<int>(0, sourceItem.Properties.Count, "Starting source item property count.");
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Starting source item property count.");
         Assert.AreEqual<int>(0, targetItem.Properties.Count, "Starting target item property count.");
         sourceItem.UseWith(targetItem);
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Source item property count.");
+        Assert.AreEqual<int>(2, sourceItem.Properties.Count, "Source item property count.");
         Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
 
         var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
@@ -111,7 +111,7 @@ public class ItemTests
 
         var anotherTargetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         sourceItem.UseWith(anotherTargetItem);
-        Assert.AreEqual<int>(0, sourceItem.Properties.Count, "Ending source item property count.");
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Ending source item property count.");
     }
 
     [TestMethod]

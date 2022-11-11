@@ -1,5 +1,8 @@
 ﻿namespace ItemSystem.Types;
 
+/// <summary>
+/// An attribute type name and a default value.
+/// </summary>
 public class AttributeTypeDefaultValue
 {
     public string Name { get; }

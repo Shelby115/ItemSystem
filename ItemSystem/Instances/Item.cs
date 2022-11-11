@@ -29,6 +29,19 @@ public class Item
     {
         Type = type;
         Properties = new Properties();
+        AddInnateProperties();
+    }
+
+    /// <summary>
+    /// Adds the properties innate to this item type (e.g., Daggers might have the "Weapon" property type).
+    /// </summary>
+    private void AddInnateProperties()
+    {
+        var innatePropertyTypes = ItemManager.InnateItemPropertyTypes.Where(x => x.ItemType == this.Type.Name);
+        foreach (var innatePropertyType in innatePropertyTypes)
+        {
+            Properties.Add(new Property(this, ItemManager.PropertyTypes.First(x => x.Name == innatePropertyType.PropertyType)));
+        }
     }
 
     /// <summary>
