@@ -8,5 +8,10 @@
     "PropertyName": "Poisoned",
     "ActionName": "Clean",
     "WillRemovePropertyOnAction": true
+  },
+  {
+    "PropertyName": "Weapon",
+    "ActionName": "Attack",
+    "WillRemovePropertyOnAction": false
   }
 ]

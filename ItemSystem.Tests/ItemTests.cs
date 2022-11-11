@@ -36,6 +36,44 @@ public class ItemTests
     }
 
     [TestMethod]
+    public void Item_GetAvailableActions_FindsInnatePropertyActionAttack()
+    {
+        var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        Assert.AreEqual<int>(1, weapon.Properties.Count, "Starting property count.");
+        var actions = weapon.GetAvailableActions();
+        Assert.AreEqual<int>(1, actions.Count(), "Action count.");
+        Assert.AreEqual<string>("Attack", actions.First());
+    }
+
+    [TestMethod]
+    public void Item_Act_AttackCanBeUsedTwice()
+    {
+        var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        Assert.AreEqual<int>(1, weapon.Properties.Count, "Starting property count.");
+        var actions = weapon.GetAvailableActions();
+        Assert.AreEqual<int>(1, actions.Count(), "Action count.");
+        Assert.AreEqual<string>("Attack", actions.First());
+        Assert.IsTrue(actions.Any(x => x == "Attack"), "The attack action is available.");
+        weapon.Act("Attack");
+        Assert.IsTrue(actions.Any(x => x == "Attack"), "The attack action is available.");
+        weapon.Act("Attack");
+    }
+
+    [TestMethod]
+    public void Item_Act_UntieRemovesRopeConnectedProperty()
+    {
+        var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        var rope = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
+        weapon.UseWith(rope);
+        Assert.AreEqual<int>(2, weapon.Properties.Count, "Starting property count.");
+        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Rope Connected"));
+        var actions = weapon.GetAvailableActions();
+        Assert.IsTrue(actions.Any(x => x == "Untie"), "The untie action is available.");
+        weapon.Act("Untie");
+        Assert.IsFalse(actions.Any(x => x == "Untie"), "The untie action is no longer available.");
+    }
+
+    [TestMethod]
     public void Item_UseWith_DoesNothing_WhenInteractionNotFound()
     {
         var sourceItem = new Item(new ItemType("A", "a"));

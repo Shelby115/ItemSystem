@@ -45,9 +45,44 @@ public class Item
     }
 
     /// <summary>
+    /// Returns a list of actions available for the item based on its type and properties.
+    /// </summary>
+    public IEnumerable<string> GetAvailableActions()
+    {
+        return ItemManager
+            .PropertyActionTypes
+            .Where(x => Properties.Any(p => p.Type.Name == x.PropertyName))
+            .Select(x => x.ActionName);
+    }
+
+    /// <summary>
+    /// Executes the action with the specified name (if found).
+    /// </summary>
+    /// <param name="actionName">Name of the action to be executed.</param>
+    public void Act(string actionName)
+    {
+        var appliableActions = ItemManager
+            .PropertyActionTypes
+            .Where(x => x.ActionName == actionName)
+            .Where(x => Properties.Any(p => p.Type.Name == x.PropertyName));
+
+        foreach (var action in appliableActions)
+        {
+            if (action.WillRemovePropertyOnAction)
+            {
+                var propertyToRemove = Properties.FirstOrDefault(x => x.Type.Name == action.PropertyName);
+                if (propertyToRemove != null)
+                {
+                    Properties.Remove(propertyToRemove);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Uses this item (e.g., Drink potion, eat food, attack with weapon, etc).
     /// </summary>
-    public virtual void Use()
+    public void Use()
     {
         // Announce that this item has been used.
         OnThisItemUsed();
