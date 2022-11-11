@@ -8,13 +8,15 @@ public class ItemPropertyType
 {
     public string Name { get; }
     public string Description { get; }
+    public bool WillExpireWhenAnAttributeExpires { get; }
 
     public IEnumerable<ItemPropertyAttributeTypeDefaultValue> AttributeTypes { get; }
 
-    public ItemPropertyType(string name, string description, IEnumerable<ItemPropertyAttributeTypeDefaultValue> attributeTypes)
+    public ItemPropertyType(string name, string description, bool willExpireWhenAnAttributeExpires, IEnumerable<ItemPropertyAttributeTypeDefaultValue> attributeTypes)
     {
         Name = name;
         Description = description;
+        WillExpireWhenAnAttributeExpires = willExpireWhenAnAttributeExpires;
         AttributeTypes = attributeTypes;
     }
 

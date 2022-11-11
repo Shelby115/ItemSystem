@@ -17,6 +17,7 @@
   {
     "Name": "Poisoned",
     "Description": "coated in a layer of poison",
+    "WillExpireWhenAnAttributeExpires": true,
     "AttributeTypes": [
       {
         "Name": "Number of Uses",

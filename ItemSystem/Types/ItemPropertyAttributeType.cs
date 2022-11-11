@@ -8,11 +8,15 @@ public class ItemPropertyAttributeType
 {
     public string Name { get; }
     public string Description { get; }
+    public bool WillValueDecreaseOnUse { get; }
+    public bool IsRemovedWhenValueReachesZero { get; }
 
-    public ItemPropertyAttributeType(string name, string description)
+    public ItemPropertyAttributeType(string name, string description, bool willValueDecreaseOnUse, bool isRemovedWhenValueReachesZero)
     {
         Name = name;
         Description = description;
+        WillValueDecreaseOnUse = willValueDecreaseOnUse;
+        IsRemovedWhenValueReachesZero = isRemovedWhenValueReachesZero;
     }
 
     public override string ToString()

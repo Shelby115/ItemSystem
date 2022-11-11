@@ -1,4 +1,6 @@
-﻿using ItemSystem.Types;
+﻿using ItemSystem.Collections;
+using ItemSystem.Events;
+using ItemSystem.Types;
 
 namespace ItemSystem.Instances;
 
@@ -8,16 +10,47 @@ namespace ItemSystem.Instances;
 /// </summary>
 public class ItemProperty
 {
-    public ItemPropertyType PropertyType { get; }
-    public ICollection<ItemPropertyAttribute> Attributes { get; }
+    private readonly Item Item;
 
-    public ItemProperty(ItemPropertyType itemPropertyType)
+    public ItemPropertyType PropertyType { get; }
+    public ItemPropertyAttributes Attributes { get; }
+
+    public event EventHandler<ItemEventArgs>? ItemUsed;
+    public event EventHandler<ItemPropertyExpiredEventArgs>? HasExpired;
+
+    public ItemProperty(Item item, ItemPropertyType itemPropertyType)
     {
+        Item = item;
+
         PropertyType = itemPropertyType;
-        Attributes = PropertyType
-            .AttributeTypes
-            .Select(x => new ItemPropertyAttribute(ItemManager.AttributeTypes.First(at => at.Name == x.Name), x.DefaultValue))
-            .ToList();
+        Attributes = new ItemPropertyAttributes(this);
+
+        Item.ItemUsed += Item_ItemUsed;
+        Attributes.CriticalAttributeExpired += Attributes_CriticalAttributeExpired;
+    }
+
+    ~ItemProperty()
+    {
+        Item.ItemUsed -= Item_ItemUsed;
+    }
+
+    /// <summary>
+    /// Forwards the signal from the associated <see cref="Item"/> that it has been used.
+    /// </summary>
+    private void Item_ItemUsed(object? sender, ItemEventArgs e)
+    {
+        if (sender == e.Item) // Don't trigger an "ItemUsed" event for attributes if it was used with another item.
+        {
+            ItemUsed?.Invoke(this, e);
+        }
+    }
+
+    /// <summary>
+    /// Signals to the item property that one of its critical attributes has expired and it should also expire.
+    /// </summary>
+    private void Attributes_CriticalAttributeExpired(object? sender, EventArgs e)
+    {
+        HasExpired?.Invoke(this, new ItemPropertyExpiredEventArgs(this));
     }
 
     public override string ToString()

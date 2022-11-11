@@ -1,4 +1,6 @@
-﻿using ItemSystem.Types;
+﻿using ItemSystem.Collections;
+using ItemSystem.Events;
+using ItemSystem.Types;
 
 namespace ItemSystem.Instances;
 
@@ -9,7 +11,7 @@ namespace ItemSystem.Instances;
 public class Item
 {
     public ItemType Type { get; }
-    public ICollection<ItemProperty> Properties { get; }
+    public ItemProperties Properties { get; }
     public string Description
     {
         get
@@ -19,12 +21,29 @@ public class Item
         }
     }
 
+    public event EventHandler<ItemEventArgs>? ItemUsed;
+    protected virtual void OnThisItemUsed() => ItemUsed?.Invoke(this, new ItemEventArgs(this));
+    protected virtual void OnItemUsedWithAnother(Item otherItem) => ItemUsed?.Invoke(this, new ItemEventArgs(otherItem));
+
     public Item(ItemType itemType)
     {
         Type = itemType;
-        Properties = new List<ItemProperty>();
+        Properties = new ItemProperties();
     }
 
+    /// <summary>
+    /// Uses this item (e.g., Drink potion, eat food, attack with weapon, etc).
+    /// </summary>
+    public virtual void Use()
+    {
+        // Announce that this item has been used.
+        OnThisItemUsed();
+    }
+
+    /// <summary>
+    /// Uses this item with another item in hopes of adding a property to this item through a special interaction (e.g., Polished Dagger, Poisoned Spear, etc).
+    /// </summary>
+    /// <param name="item">The target item to interact with this one.</param>
     public void UseWith(Item item)
     {
         // See if it is a valid item interaction.
@@ -43,7 +62,10 @@ public class Item
         }
 
         // Add the property from the interaction.
-        Properties.Add(new ItemProperty(addedProperty));
+        Properties.Add(new ItemProperty(this, addedProperty));
+
+        // Announce that this item has been used with another.
+        OnItemUsedWithAnother(item);
     }
 
     public override string ToString()

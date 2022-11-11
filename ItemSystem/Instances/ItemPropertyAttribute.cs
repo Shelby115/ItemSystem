@@ -1,4 +1,5 @@
-﻿using ItemSystem.Types;
+﻿using ItemSystem.Events;
+using ItemSystem.Types;
 
 namespace ItemSystem.Instances;
 
@@ -8,17 +9,54 @@ namespace ItemSystem.Instances;
 /// </summary>
 public class ItemPropertyAttribute
 {
-    public ItemPropertyAttributeType AttributeType { get; }
-    public int Value { get; set; }
+    private readonly ItemProperty ItemProperty;
 
-    public ItemPropertyAttribute(ItemPropertyAttributeType attributeType, int value)
+    public ItemPropertyAttributeType AttributeType { get; }
+    public AttributeValue AttributeValue { get; private set; }
+
+    public event EventHandler<ItemPropertyAttributeExpiredEventArgs>? AttributeExpired;
+
+    public ItemPropertyAttribute(ItemProperty itemProperty, ItemPropertyAttributeType attributeType, int value)
     {
+        ItemProperty = itemProperty;
+
         AttributeType = attributeType;
-        Value = value;
+        AttributeValue = new AttributeValue(value);
+
+        ItemProperty.ItemUsed += ItemProperty_ItemUsed;
+        AttributeValue.HasChanged += Value_HasChanged;
+    }
+
+    ~ItemPropertyAttribute()
+    {
+        ItemProperty.ItemUsed -= ItemProperty_ItemUsed;
+        AttributeValue.HasChanged -= Value_HasChanged;
+    }
+
+    /// <summary>
+    /// Checks if the value should expire, when the attribute's value changes.
+    /// </summary>
+    private void Value_HasChanged(object? sender, EventArgs e)
+    {
+        if (AttributeValue == 0 && AttributeType.IsRemovedWhenValueReachesZero)
+        {
+            AttributeExpired?.Invoke(this, new ItemPropertyAttributeExpiredEventArgs(this));
+        }
+    }
+
+    /// <summary>
+    /// Signals to the attribute that the associated item was used.
+    /// </summary>
+    private void ItemProperty_ItemUsed(object? sender, ItemEventArgs e)
+    {
+        if (AttributeType.WillValueDecreaseOnUse)
+        {
+            AttributeValue.Value -= 1;
+        }
     }
 
     public override string ToString()
     {
-        return $"{AttributeType.Name}: {Value}";
+        return $"{AttributeType.Name}: {AttributeValue}";
     }
 }
