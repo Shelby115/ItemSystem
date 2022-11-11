@@ -8,11 +8,13 @@ Type entities shall be loaded from configuration files and will be immutable onc
 3. InteractionType - A set of two items that when used together add an item property to the source item (e.g., A dagger used with a poison vial will add the poisoned property).
 4. AtttributeType - A name and description for an attribute of a property (e.g., The poisoned property might have the attributes "Number of uses" and "Added poison damage").
 5. AttributeTypeDefaultValue - An attribute type name, property type name, and a default value.
+6. InnateItemPropertyType - A property type name that should be added to an item of a certain type by default.
+7. PropertyActionType - A property type name and a flag indicating if the property should be removed when the action whose name is specified is used.
 
 ## Instance Entities
 These entities are instances of type entities. They generally have one or more types associated with them as well as a value attached which is mutable as opposed to the immutable type entities.
 
-1. ropertyAttribute - An instance of an ItemPropertyAttributeType with a value associated.
+1. PropertyAttribute - An instance of an ItemPropertyAttributeType with a value associated.
 2. Property - An instance of an ItemPropertyType with a set of attributes associated.
 3. Item - An instance of an ItemType with properties associated.
 
