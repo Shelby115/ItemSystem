@@ -38,7 +38,6 @@ public class ItemTests
     [TestMethod]
     public void Item_UseWith_DoesNothing_WhenInteractionNotFound()
     {
-        var game = new ItemManager();
         var sourceItem = new Item(new ItemType("A", "a"));
         var targetItem = new Item(new ItemType("B", "b"));
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
@@ -51,7 +50,6 @@ public class ItemTests
     [TestMethod]
     public void Item_UseWith_DoesNothing_WhenPropertyNotFound()
     {
-        var game = new ItemManager();
         var sourceItem = new Item(new ItemType("B", "b"));
         var targetItem = new Item(new ItemType("C", "c"));
         Assert.AreEqual<int>(0, sourceItem.Properties.Count);
@@ -95,6 +93,25 @@ public class ItemTests
         var addedPoisonDamage = property.Attributes.FirstOrDefault(x => x.Type.Name == "Added Poison Damage");
         Assert.IsNotNull(addedPoisonDamage);
         Assert.AreEqual<int>(10, addedPoisonDamage.AttributeValue, "Added poison damage value.");
+    }
+
+    [TestMethod]
+    public void Item_UseWith_RemovesProperty_WhenInteractionAndPropertyFound()
+    {
+        var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count, "Starting source item property count.");
+        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Starting target item property count.");
+        sourceItem.UseWith(targetItem);
+        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Source item property count.");
+        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
+
+        var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
+        Assert.IsNotNull(property);
+
+        var anotherTargetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        sourceItem.UseWith(anotherTargetItem);
+        Assert.AreEqual<int>(0, sourceItem.Properties.Count, "Ending source item property count.");
     }
 
     [TestMethod]

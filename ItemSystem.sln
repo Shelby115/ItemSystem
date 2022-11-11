@@ -9,10 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemSystem.Tests", "ItemSys
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameData", "GameData", "{C522AAC3-697A-477F-9D60-58369FF02C23}"
 	ProjectSection(SolutionItems) = preProject
+		InnateItemProperties.json = InnateItemProperties.json
 		ItemInteractionTypes.json = ItemInteractionTypes.json
 		ItemPropertyAttributeTypes.json = ItemPropertyAttributeTypes.json
 		ItemPropertyTypes.json = ItemPropertyTypes.json
 		ItemTypes.json = ItemTypes.json
+		PropertyActionTypes.json = PropertyActionTypes.json
 	EndProjectSection
 EndProject
 Global

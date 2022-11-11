@@ -1,5 +1,10 @@
 [
   {
+    "Name": "Weapon",
+    "Description": "can be used to attack",
+    "AttributeTypes": []
+  },
+  {
     "Name": "Rope Connected",
     "Description": "connected to a rope",
     "AttributeTypes": []

@@ -47,22 +47,35 @@ public class Item
     public void UseWith(Item item)
     {
         // See if it is a valid item interaction.
-        var suggestedInteraction = ItemManager.InteractionTypes.FirstOrDefault(x => x.SourceItem == Type.Name && x.TargetItem == item.Type.Name);
-        if (suggestedInteraction == null) { return; }
+        var interaction = ItemManager.InteractionTypes.FirstOrDefault(x => x.SourceItem == Type.Name && x.TargetItem == item.Type.Name);
+        if (interaction == null) { return; }
 
-        // Find the resulting item property.
-        var addedProperty = ItemManager.PropertyTypes.FirstOrDefault(x => x.Name == suggestedInteraction.AddedProperty);
-        if (addedProperty == null) { return; }
-
-        // Check if it already exists, if it does remove it before adding it again.
-        var sourceItemProperty = Properties.FirstOrDefault(x => x.Type.Name == suggestedInteraction.AddedProperty);
-        if (sourceItemProperty != null)
+        if (interaction.AddedProperty != null)
         {
-            Properties.Remove(sourceItemProperty);
+            // Find the resulting item property.
+            var addedProperty = ItemManager.PropertyTypes.FirstOrDefault(x => x.Name == interaction.AddedProperty);
+            if (addedProperty != null)
+            {
+                // Check if it already exists, if it does remove it before adding it again.
+                var sourceItemProperty = Properties.FirstOrDefault(x => x.Type.Name == interaction.AddedProperty);
+                if (sourceItemProperty != null)
+                {
+                    Properties.Remove(sourceItemProperty);
+                }
+
+                // Add the property from the interaction.
+                Properties.Add(new Property(this, addedProperty));
+            }
         }
 
-        // Add the property from the interaction.
-        Properties.Add(new Property(this, addedProperty));
+        if (interaction.RemovedProperty != null)
+        {
+            var propertyToRemove = Properties.FirstOrDefault(x => x.Type.Name == interaction.RemovedProperty);
+            if (propertyToRemove != null)
+            {
+                Properties.Remove(propertyToRemove);
+            }
+        }
 
         // Announce that this item has been used with another.
         OnItemUsedWithAnother(item);

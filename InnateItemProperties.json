@@ -1,0 +1,26 @@
+[
+  {
+    "ItemType": "Dagger",
+    "PropertyType": "Weapon"
+  },
+  {
+    "ItemType": "Club",
+    "PropertyType": "Weapon"
+  },
+  {
+    "ItemType": "Axe",
+    "PropertyType": "Weapon"
+  },
+  {
+    "ItemType": "Spear",
+    "PropertyType": "Weapon"
+  },
+  {
+    "ItemType": "Hammer",
+    "PropertyType": "Weapon"
+  },
+  {
+    "ItemType": "Quarterstaff",
+    "PropertyType": "Weapon"
+  }
+]

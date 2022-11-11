@@ -1,0 +1,12 @@
+[
+  {
+    "PropertyName": "Rope Connected",
+    "ActionName": "Untie",
+    "WillRemovePropertyOnAction": true
+  },
+  {
+    "PropertyName": "Poisoned",
+    "ActionName": "Clean",
+    "WillRemovePropertyOnAction": true
+  }
+]
