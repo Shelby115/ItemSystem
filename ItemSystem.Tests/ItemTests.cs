@@ -28,8 +28,8 @@ public class ItemTests
         Assert.AreEqual<string>("test", item.Type.Description);
         Assert.AreEqual<string>("Test.", item.Description);
 
-        var propertyType = new ItemPropertyType("Rope", "connected to a rope", false, new List<ItemPropertyAttributeTypeDefaultValue>());
-        item.Properties.Add(new ItemProperty(item, propertyType));
+        var propertyType = new PropertyType("Rope", "connected to a rope", false, new List<AttributeTypeDefaultValue>());
+        item.Properties.Add(new Property(item, propertyType));
 
         Assert.IsNotNull(item.Properties);
         Assert.AreEqual<string>("Test connected to a rope.", item.Description);
@@ -49,7 +49,7 @@ public class ItemTests
     }
 
     [TestMethod]
-    public void Item_UseWith_DoesNothing_WhenItemPropertyNotFound()
+    public void Item_UseWith_DoesNothing_WhenPropertyNotFound()
     {
         var game = new ItemManager();
         var sourceItem = new Item(new ItemType("B", "b"));
@@ -71,7 +71,7 @@ public class ItemTests
         sourceItem.UseWith(targetItem);
         Assert.AreEqual<int>(1, sourceItem.Properties.Count);
         Assert.AreEqual<int>(0, targetItem.Properties.Count);
-        var property = sourceItem.Properties.FirstOrDefault(x => x.PropertyType.Name == "Rope Connected");
+        var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
         Assert.IsNotNull(property);
     }
 
@@ -85,14 +85,14 @@ public class ItemTests
         sourceItem.UseWith(targetItem);
         Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Source item property count.");
         Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
-        var property = sourceItem.Properties.FirstOrDefault(x => x.PropertyType.Name == "Poisoned");
+        var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Poisoned");
         Assert.IsNotNull(property);
         Assert.IsNotNull(property.Attributes, "Property attributes.");
         Assert.AreEqual<int>(2, property.Attributes.Count, "Property attribute count.");
-        var numberOfUses = property.Attributes.FirstOrDefault(x => x.AttributeType.Name == "Number of Uses");
+        var numberOfUses = property.Attributes.FirstOrDefault(x => x.Type.Name == "Number of Uses");
         Assert.IsNotNull(numberOfUses);
         Assert.AreEqual<int>(1, numberOfUses.AttributeValue, "Number of uses value.");
-        var addedPoisonDamage = property.Attributes.FirstOrDefault(x => x.AttributeType.Name == "Added Poison Damage");
+        var addedPoisonDamage = property.Attributes.FirstOrDefault(x => x.Type.Name == "Added Poison Damage");
         Assert.IsNotNull(addedPoisonDamage);
         Assert.AreEqual<int>(10, addedPoisonDamage.AttributeValue, "Added poison damage value.");
     }
@@ -103,7 +103,7 @@ public class ItemTests
         var eventsTriggered = new List<ItemEventArgs>();
 
         var item = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
-        item.ItemUsed += delegate (object? sender, ItemEventArgs e)
+        item.Used += delegate (object? sender, ItemEventArgs e)
         {
             eventsTriggered.Add(e);
         };
@@ -114,7 +114,7 @@ public class ItemTests
     }
 
     [TestMethod]
-    public void Item_Use_TriggersItemPropertyItemUsedEvent()
+    public void Item_Use_TriggersPropertyItemUsedEvent()
     {
         var eventsTriggered = new List<ItemEventArgs>();
 
@@ -122,7 +122,7 @@ public class ItemTests
         var otherItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
         item.UseWith(otherItem);
 
-        var itemProperty = item.Properties.First(x => x.PropertyType.Name == "Poisoned");
+        var itemProperty = item.Properties.First(x => x.Type.Name == "Poisoned");
         itemProperty.ItemUsed += delegate (object? sender, ItemEventArgs e)
         {
             eventsTriggered.Add(e);
@@ -139,28 +139,28 @@ public class ItemTests
         var item = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var otherItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
         item.UseWith(otherItem);
-        var itemProperty = item.Properties.First(x => x.PropertyType.Name == "Poisoned");
-        var attribute = itemProperty.Attributes.First(x => x.AttributeType.Name == "Number of Uses");
+        var itemProperty = item.Properties.First(x => x.Type.Name == "Poisoned");
+        var attribute = itemProperty.Attributes.First(x => x.Type.Name == "Number of Uses");
         Assert.AreEqual<int>(1, attribute.AttributeValue, "Starting number of uses.");
-        Assert.AreEqual<bool>(true, attribute.AttributeType.WillValueDecreaseOnUse, "Check that 'Number of Uses' is configured to reduce on use.");
+        Assert.AreEqual<bool>(true, attribute.Type.WillValueDecreaseOnUse, "Check that 'Number of Uses' is configured to reduce on use.");
         item.Use();
         Assert.AreEqual<int>(0, attribute.AttributeValue, "Number of uses after being used.");
     }
 
     [TestMethod]
-    public void Item_Use_ItemPropertyAttributeFiresExpiredEventWhenValueReachesZero()
+    public void Item_Use_AttributeFiresExpiredEventWhenValueReachesZero()
     {
-        var eventsTriggered = new List<ItemPropertyAttributeExpiredEventArgs>();
+        var eventsTriggered = new List<AttributeExpiredEventArgs>();
 
         var item = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var otherItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
         item.UseWith(otherItem);
-        var itemProperty = item.Properties.First(x => x.PropertyType.Name == "Poisoned");
-        var attribute = itemProperty.Attributes.First(x => x.AttributeType.Name == "Number of Uses");
+        var itemProperty = item.Properties.First(x => x.Type.Name == "Poisoned");
+        var attribute = itemProperty.Attributes.First(x => x.Type.Name == "Number of Uses");
         Assert.AreEqual<int>(1, attribute.AttributeValue, "Starting number of uses.");
-        Assert.AreEqual<bool>(true, attribute.AttributeType.WillValueDecreaseOnUse, "Check that 'Number of Uses' is configured to reduce on use.");
-        Assert.AreEqual<bool>(true, attribute.AttributeType.IsRemovedWhenValueReachesZero, "Check that 'Number of Uses' is configured to expire when zero.");
-        attribute.AttributeExpired += delegate (object? sender, ItemPropertyAttributeExpiredEventArgs e)
+        Assert.AreEqual<bool>(true, attribute.Type.WillValueDecreaseOnUse, "Check that 'Number of Uses' is configured to reduce on use.");
+        Assert.AreEqual<bool>(true, attribute.Type.IsRemovedWhenValueReachesZero, "Check that 'Number of Uses' is configured to expire when zero.");
+        attribute.AttributeExpired += delegate (object? sender, AttributeExpiredEventArgs e)
         {
             eventsTriggered.Add(e);
         };
@@ -170,23 +170,23 @@ public class ItemTests
     }
 
     [TestMethod]
-    public void Item_Use_ItemPropertyExpiresWhenAttributeExpires()
+    public void Item_Use_PropertyExpiresWhenAttributeExpires()
     {
-        var eventsTriggered = new List<ItemPropertyExpiredEventArgs>();
+        var eventsTriggered = new List<PropertyExpiredEventArgs>();
 
         var item = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var otherItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
         item.UseWith(otherItem);
-        var itemProperty = item.Properties.First(x => x.PropertyType.Name == "Poisoned");
-        Assert.AreEqual<bool>(true, itemProperty.PropertyType.WillExpireWhenAnAttributeExpires, "Check that 'Poisoned' is confiugred to expire when an attribute expires.");
-        itemProperty.HasExpired += delegate (object? sender, ItemPropertyExpiredEventArgs e)
+        var itemProperty = item.Properties.First(x => x.Type.Name == "Poisoned");
+        Assert.AreEqual<bool>(true, itemProperty.Type.WillExpireWhenAnAttributeExpires, "Check that 'Poisoned' is confiugred to expire when an attribute expires.");
+        itemProperty.HasExpired += delegate (object? sender, PropertyExpiredEventArgs e)
         {
             eventsTriggered.Add(e);
         };
-        var attribute = itemProperty.Attributes.First(x => x.AttributeType.Name == "Number of Uses");
+        var attribute = itemProperty.Attributes.First(x => x.Type.Name == "Number of Uses");
         Assert.AreEqual<int>(1, attribute.AttributeValue, "Starting number of uses.");
-        Assert.AreEqual<bool>(true, attribute.AttributeType.WillValueDecreaseOnUse, "Check that 'Number of Uses' is configured to reduce on use.");
-        Assert.AreEqual<bool>(true, attribute.AttributeType.IsRemovedWhenValueReachesZero, "Check that 'Number of Uses' is configured to expire when zero.");
+        Assert.AreEqual<bool>(true, attribute.Type.WillValueDecreaseOnUse, "Check that 'Number of Uses' is configured to reduce on use.");
+        Assert.AreEqual<bool>(true, attribute.Type.IsRemovedWhenValueReachesZero, "Check that 'Number of Uses' is configured to expire when zero.");
         item.Use();
         Assert.AreEqual<int>(0, attribute.AttributeValue, "Number of uses after being used.");
         Assert.AreEqual<int>(1, eventsTriggered.Count, "Number of events triggered.");

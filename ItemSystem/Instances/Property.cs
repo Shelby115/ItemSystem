@@ -5,33 +5,33 @@ using ItemSystem.Types;
 namespace ItemSystem.Instances;
 
 /// <summary>
-/// An instance of an <see cref="ItemPropertyType"/> with a set of attributes associated.
+/// An instance of an <see cref="Types.PropertyType"/> with a set of attributes associated.
 /// An example would be an item property type of "Poisoned" with attributes of "Number of Uses" and "Added Poison Damage" associated.
 /// </summary>
-public class ItemProperty
+public class Property
 {
     private readonly Item Item;
 
-    public ItemPropertyType PropertyType { get; }
-    public ItemPropertyAttributes Attributes { get; }
+    public PropertyType Type { get; }
+    public Attributes Attributes { get; }
 
     public event EventHandler<ItemEventArgs>? ItemUsed;
-    public event EventHandler<ItemPropertyExpiredEventArgs>? HasExpired;
+    public event EventHandler<PropertyExpiredEventArgs>? HasExpired;
 
-    public ItemProperty(Item item, ItemPropertyType itemPropertyType)
+    public Property(Item item, PropertyType itemPropertyType)
     {
         Item = item;
 
-        PropertyType = itemPropertyType;
-        Attributes = new ItemPropertyAttributes(this);
+        Type = itemPropertyType;
+        Attributes = new Attributes(this);
 
-        Item.ItemUsed += Item_ItemUsed;
+        Item.Used += Item_ItemUsed;
         Attributes.CriticalAttributeExpired += Attributes_CriticalAttributeExpired;
     }
 
-    ~ItemProperty()
+    ~Property()
     {
-        Item.ItemUsed -= Item_ItemUsed;
+        Item.Used -= Item_ItemUsed;
     }
 
     /// <summary>
@@ -50,12 +50,12 @@ public class ItemProperty
     /// </summary>
     private void Attributes_CriticalAttributeExpired(object? sender, EventArgs e)
     {
-        HasExpired?.Invoke(this, new ItemPropertyExpiredEventArgs(this));
+        HasExpired?.Invoke(this, new PropertyExpiredEventArgs(this));
     }
 
     public override string ToString()
     {
         var attributesDescription = $" {String.Join(" ", Attributes.Select(x => "[" + x + "]"))}";
-        return $"{PropertyType.Name}{attributesDescription}".Trim();
+        return $"{Type.Name}{attributesDescription}".Trim();
     }
 }

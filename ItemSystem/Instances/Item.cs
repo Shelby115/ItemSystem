@@ -11,24 +11,24 @@ namespace ItemSystem.Instances;
 public class Item
 {
     public ItemType Type { get; }
-    public ItemProperties Properties { get; }
+    public Properties Properties { get; }
     public string Description
     {
         get
         {
-            var additionalDescriptions = string.Join(" ", Properties.Select(x => x.PropertyType.Description));
+            var additionalDescriptions = string.Join(" ", Properties.Select(x => x.Type.Description));
             return $"{Type.Description} {additionalDescriptions}".Sentence();
         }
     }
 
-    public event EventHandler<ItemEventArgs>? ItemUsed;
-    protected virtual void OnThisItemUsed() => ItemUsed?.Invoke(this, new ItemEventArgs(this));
-    protected virtual void OnItemUsedWithAnother(Item otherItem) => ItemUsed?.Invoke(this, new ItemEventArgs(otherItem));
+    public event EventHandler<ItemEventArgs>? Used;
+    protected virtual void OnThisItemUsed() => Used?.Invoke(this, new ItemEventArgs(this));
+    protected virtual void OnItemUsedWithAnother(Item otherItem) => Used?.Invoke(this, new ItemEventArgs(otherItem));
 
-    public Item(ItemType itemType)
+    public Item(ItemType type)
     {
-        Type = itemType;
-        Properties = new ItemProperties();
+        Type = type;
+        Properties = new Properties();
     }
 
     /// <summary>
@@ -55,14 +55,14 @@ public class Item
         if (addedProperty == null) { return; }
 
         // Check if it already exists, if it does remove it before adding it again.
-        var sourceItemProperty = Properties.FirstOrDefault(x => x.PropertyType.Name == suggestedInteraction.AddedProperty);
+        var sourceItemProperty = Properties.FirstOrDefault(x => x.Type.Name == suggestedInteraction.AddedProperty);
         if (sourceItemProperty != null)
         {
             Properties.Remove(sourceItemProperty);
         }
 
         // Add the property from the interaction.
-        Properties.Add(new ItemProperty(this, addedProperty));
+        Properties.Add(new Property(this, addedProperty));
 
         // Announce that this item has been used with another.
         OnItemUsedWithAnother(item);

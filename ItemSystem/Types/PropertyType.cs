@@ -4,15 +4,15 @@
 /// A name, description, and attributes for a property that could be applied to an item.
 /// For example, you could have the property "Shiny" applied to an item with a "Number of Uses" of 5.
 /// </summary>
-public class ItemPropertyType
+public class PropertyType
 {
     public string Name { get; }
     public string Description { get; }
     public bool WillExpireWhenAnAttributeExpires { get; }
 
-    public IEnumerable<ItemPropertyAttributeTypeDefaultValue> AttributeTypes { get; }
+    public IEnumerable<AttributeTypeDefaultValue> AttributeTypes { get; }
 
-    public ItemPropertyType(string name, string description, bool willExpireWhenAnAttributeExpires, IEnumerable<ItemPropertyAttributeTypeDefaultValue> attributeTypes)
+    public PropertyType(string name, string description, bool willExpireWhenAnAttributeExpires, IEnumerable<AttributeTypeDefaultValue> attributeTypes)
     {
         Name = name;
         Description = description;

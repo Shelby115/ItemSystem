@@ -4,30 +4,30 @@ using ItemSystem.Types;
 namespace ItemSystem.Instances;
 
 /// <summary>
-/// An instance of an <see cref="ItemPropertyAttributeType"/> with a value associated.
+/// An instance of an <see cref="Types.AttributeType"/> with a value associated.
 /// An example would be an attribute type of "Number of Uses" and a value of 1 or an attribute type of "Added poison damage" and a value of 10.
 /// </summary>
-public class ItemPropertyAttribute
+public class PropertyAttribute
 {
-    private readonly ItemProperty ItemProperty;
+    private readonly Property ItemProperty;
 
-    public ItemPropertyAttributeType AttributeType { get; }
-    public AttributeValue AttributeValue { get; private set; }
+    public AttributeType Type { get; }
+    public LoudInteger AttributeValue { get; private set; }
 
-    public event EventHandler<ItemPropertyAttributeExpiredEventArgs>? AttributeExpired;
+    public event EventHandler<AttributeExpiredEventArgs>? AttributeExpired;
 
-    public ItemPropertyAttribute(ItemProperty itemProperty, ItemPropertyAttributeType attributeType, int value)
+    public PropertyAttribute(Property itemProperty, AttributeType attributeType, int value)
     {
         ItemProperty = itemProperty;
 
-        AttributeType = attributeType;
-        AttributeValue = new AttributeValue(value);
+        Type = attributeType;
+        AttributeValue = new LoudInteger(value);
 
         ItemProperty.ItemUsed += ItemProperty_ItemUsed;
         AttributeValue.HasChanged += Value_HasChanged;
     }
 
-    ~ItemPropertyAttribute()
+    ~PropertyAttribute()
     {
         ItemProperty.ItemUsed -= ItemProperty_ItemUsed;
         AttributeValue.HasChanged -= Value_HasChanged;
@@ -38,9 +38,9 @@ public class ItemPropertyAttribute
     /// </summary>
     private void Value_HasChanged(object? sender, EventArgs e)
     {
-        if (AttributeValue == 0 && AttributeType.IsRemovedWhenValueReachesZero)
+        if (AttributeValue == 0 && Type.IsRemovedWhenValueReachesZero)
         {
-            AttributeExpired?.Invoke(this, new ItemPropertyAttributeExpiredEventArgs(this));
+            AttributeExpired?.Invoke(this, new AttributeExpiredEventArgs(this));
         }
     }
 
@@ -49,7 +49,7 @@ public class ItemPropertyAttribute
     /// </summary>
     private void ItemProperty_ItemUsed(object? sender, ItemEventArgs e)
     {
-        if (AttributeType.WillValueDecreaseOnUse)
+        if (Type.WillValueDecreaseOnUse)
         {
             AttributeValue.Value -= 1;
         }
@@ -57,6 +57,6 @@ public class ItemPropertyAttribute
 
     public override string ToString()
     {
-        return $"{AttributeType.Name}: {AttributeValue}";
+        return $"{Type.Name}: {AttributeValue}";
     }
 }

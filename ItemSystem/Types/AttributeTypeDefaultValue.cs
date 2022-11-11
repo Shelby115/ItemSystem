@@ -1,11 +1,11 @@
 ﻿namespace ItemSystem.Types;
 
-public class ItemPropertyAttributeTypeDefaultValue
+public class AttributeTypeDefaultValue
 {
     public string Name { get; }
     public int DefaultValue { get; }
 
-    public ItemPropertyAttributeTypeDefaultValue(string name, int defaultValue)
+    public AttributeTypeDefaultValue(string name, int defaultValue)
     {
         Name = name;
         DefaultValue = defaultValue;

@@ -13,7 +13,7 @@ public class ManagerTests
     public void Manager_Constructor()
     {
         var itemTypeManager = new Manager<ItemType>();
-        var itemPropertyManager = new Manager<ItemProperty>();
+        var itemPropertyManager = new Manager<Property>();
     }
     [TestMethod]
     public void Manager_Load_ItemTypes()
@@ -27,7 +27,7 @@ public class ManagerTests
     [TestMethod]
     public void Manager_Load_ItemPropertyTypes()
     {
-        var manager = new Manager<ItemPropertyType>();
+        var manager = new Manager<PropertyType>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemPropertyTypes.json");
         var results = manager.ToList();
         Assert.IsNotNull(results);
@@ -36,7 +36,7 @@ public class ManagerTests
     [TestMethod]
     public void Manager_Load_ItemInteractionTypes()
     {
-        var manager = new Manager<ItemInteractionType>();
+        var manager = new Manager<InteractionType>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemInteractionTypes.json");
         var results = manager.ToList();
         Assert.IsNotNull(results);
@@ -45,7 +45,7 @@ public class ManagerTests
     [TestMethod]
     public void Manager_Load_Clear()
     {
-        var manager = new Manager<ItemPropertyType>();
+        var manager = new Manager<PropertyType>();
         manager.Load($"{Directory.GetCurrentDirectory()}../../../../../ItemPropertyTypes.json");
         var results = manager.ToList();
         Assert.IsNotNull(results);

@@ -1,6 +1,9 @@
 ﻿namespace ItemSystem;
 
-public class AttributeValue
+/// <summary>
+/// An integer value that announces when it changes.
+/// </summary>
+public class LoudInteger
 {
     public event EventHandler? HasChanged;
 
@@ -15,12 +18,12 @@ public class AttributeValue
         }
     }
 
-    public AttributeValue(int value = 0)
+    public LoudInteger(int value = 0)
     {
         _Value = value;
     }
 
-    public static implicit operator int(AttributeValue value) => value._Value;
+    public static implicit operator int(LoudInteger value) => value._Value;
 
     public override string ToString()
     {
