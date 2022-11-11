@@ -19,8 +19,8 @@ These entities are instances of type entities. They generally have one or more t
 
 ## TODO
 
-1. Add a method for easily updating the value of a property attribute (Events maybe?).
-2. Add a method for easily removing a property from an item (e.g., Number of uses reaches 0, Rope is cut or removed, Dagger is bloodied, etc).
+~~1. Add a method for easily updating the value of a property attribute (Events maybe?).~~
+~~2. Add a method for easily removing a property from an item (e.g., Number of uses reaches 0, Rope is cut or removed, Dagger is bloodied, etc).~~
 3. Ability to require a property for an interaction.
 4. Ability to remove a property via an interaction.
 5. Ability to require only a property for an interaction.
