@@ -51,7 +51,10 @@ public class Item
     {
         var appliableActionTypes = ItemManager
             .PropertyActionTypes
-            .Where(x => x.PropertyNames.All(pn => Properties.Any(p => p.Type.Name == pn)));
+            // Does this item have all of the required properties for the action? (e.g., Pull Rope would require both Thrown and Rope Connected).
+            .Where(x => x.PropertyNames.All(pn => Properties.Any(p => p.Type.Name == pn)))
+            // Does this item have none of the preventing properties for the action? (e.g., Attack would require that it is not Thrown).
+            .Where(x => x.PreventingProperties.Any(pp => Properties.Any(p => p.Type.Name == pp)) == false);
         return appliableActionTypes;
     }
 
@@ -69,7 +72,8 @@ public class Item
     /// <param name="actionName">Name of the action to be executed.</param>
     public void Act(string actionName)
     {
-        var applicableActions = GetAvailableActionTypes().Where(x => x.ActionName == actionName);
+        var applicableActions = GetAvailableActionTypes()
+            .Where(x => x.ActionName == actionName);
         var changes = new Dictionary<bool, Property>();
 
         foreach (var actionType in applicableActions)

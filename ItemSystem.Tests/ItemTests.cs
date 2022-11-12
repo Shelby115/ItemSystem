@@ -105,6 +105,28 @@ public class ItemTests
     }
 
     [TestMethod]
+    public void Item_Act_ThrownWeaponCannotBeUsedToAttack()
+    {
+        var dagger = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Weapon"), "Dagger starts with Weapon property.");
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Throwable"), "Dagger starts with Throwable property.");
+
+        var actions = dagger.GetAvailableActions();
+        Assert.IsTrue(actions.Any(x => x == "Attack"));
+        Assert.IsTrue(actions.Any(x => x == "Throw"));
+
+        dagger.Act("Throw");
+
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Weapon"), "Dagger still has the Weapon property after being thrown.");
+        Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Throwable"), "Dagger no longer has the Throwable property after being thrown.");
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Thrown"), "Dagger has the Thrown property after being thrown.");
+
+        actions = dagger.GetAvailableActions();
+        Assert.IsFalse(actions.Any(x => x == "Attack"), "Dagger no longer has the Attack action after being thrown.");
+        Assert.IsFalse(actions.Any(x => x == "Throw"), "Dagger no longer has the Throw action after being thrown.");
+    }
+
+    [TestMethod]
     public void Item_UseWith_DoesNothing_WhenInteractionNotFound()
     {
         var sourceItem = new Item(new ItemType("A", "a"));

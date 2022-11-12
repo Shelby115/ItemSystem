@@ -6,15 +6,17 @@
 /// </summary>
 public class PropertyActionType
 {
-    public string[] PropertyNames { get; }
     public string ActionName { get; }
+    public string[] PropertyNames { get; }
+    public string[] PreventingProperties { get; }
     public string RemovedProperty { get; }
     public string AddedProperty { get; }
 
-    public PropertyActionType(string[] propertyNames, string actionName, string removedProperty, string addedProperty)
+    public PropertyActionType(string actionName, string[] propertyNames, string[] preventingProperties, string removedProperty, string addedProperty)
     {
-        PropertyNames = propertyNames;
         ActionName = actionName;
+        PropertyNames = propertyNames ?? new string[0];
+        PreventingProperties = preventingProperties ?? new string[0];
         RemovedProperty = removedProperty;
         AddedProperty = addedProperty;
     }

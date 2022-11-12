@@ -1,27 +1,31 @@
 [
   {
-    "PropertyNames": [ "Rope Connected" ],
     "ActionName": "Untie",
+    "PropertyNames": [ "Rope Connected" ],
+    "PreventingProperties": [ "Thrown" ],
     "RemovedProperty": "Rope Connected"
   },
   {
-    "PropertyNames": [ "Poisoned" ],
     "ActionName": "Clean",
+    "PropertyNames": [ "Poisoned" ],
+    "PreventingProperties": [ "Thrown" ],
     "RemovedProperty": "Poisoned"
   },
   {
+    "ActionName": "Attack",
     "PropertyNames": [ "Weapon" ],
-    "ActionName": "Attack"
+    "PreventingProperties": [ "Thrown" ]
   },
   {
-    "PropertyNames": [ "Throwable" ],
     "ActionName": "Throw",
+    "PropertyNames": [ "Throwable" ],
+    "PreventingProperties": [ "Thrown" ],
     "RemovedProperty": "Throwable",
     "AddedProperty": "Thrown"
   },
   {
-    "PropertyNames": [ "Rope Connected", "Thrown" ],
     "ActionName": "Pull Rope",
+    "PropertyNames": [ "Rope Connected", "Thrown" ],
     "RemovedProperty": "Thrown",
     "AddedProperty": "Throwable"
   }
