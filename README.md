@@ -28,6 +28,6 @@ These entities are instances of type entities. They generally have one or more t
 5. Ability to require only a property for an interaction.
 6. ~~List and Add actions based on an item's properties.~~
 7. ~~Add innate item properties for item types.~~
-8. Ability to transform one property into another property upon interaction (e.g., Throw can be transformed into Thrown).
-9. Ability to require multiple property requirements for an action (e.g., "Rope Connected" and "Thrown" allows for "Pull Rope Back").
-10. Ability for a property to prevent an action (e.g., The thrown property would prevent using the Attack action with that item).
+8. ~~Ability to transform one property into another property upon interaction (e.g., Throw can be transformed into Thrown).~~
+9. ~~Ability to require multiple property requirements for an action (e.g., "Rope Connected" and "Thrown" allows for "Pull Rope Back").~~
+10. ~~Ability for a property to prevent an action (e.g., The thrown property would prevent using the Attack action with that item).~~
