@@ -1,17 +1,28 @@
 [
   {
-    "PropertyName": "Rope Connected",
+    "PropertyNames": [ "Rope Connected" ],
     "ActionName": "Untie",
-    "WillRemovePropertyOnAction": true
+    "RemovedProperty": "Rope Connected"
   },
   {
-    "PropertyName": "Poisoned",
+    "PropertyNames": [ "Poisoned" ],
     "ActionName": "Clean",
-    "WillRemovePropertyOnAction": true
+    "RemovedProperty": "Poisoned"
   },
   {
-    "PropertyName": "Weapon",
-    "ActionName": "Attack",
-    "WillRemovePropertyOnAction": false
+    "PropertyNames": [ "Weapon" ],
+    "ActionName": "Attack"
+  },
+  {
+    "PropertyNames": [ "Throwable" ],
+    "ActionName": "Throw",
+    "RemovedProperty": "Throwable",
+    "AddedProperty": "Thrown"
+  },
+  {
+    "PropertyNames": [ "Rope Connected", "Thrown" ],
+    "ActionName": "Pull Rope",
+    "RemovedProperty": "Thrown",
+    "AddedProperty": "Throwable"
   }
 ]

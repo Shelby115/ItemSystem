@@ -45,14 +45,22 @@ public class Item
     }
 
     /// <summary>
-    /// Returns a list of actions available for the item based on its type and properties.
+    /// Retrieves a list of action types that should be available to the item.
+    /// </summary>
+    private IEnumerable<PropertyActionType> GetAvailableActionTypes()
+    {
+        var appliableActionTypes = ItemManager
+            .PropertyActionTypes
+            .Where(x => x.PropertyNames.All(pn => Properties.Any(p => p.Type.Name == pn)));
+        return appliableActionTypes;
+    }
+
+    /// <summary>
+    /// Retrieves a list of action names available for the item based on its type and properties.
     /// </summary>
     public IEnumerable<string> GetAvailableActions()
     {
-        return ItemManager
-            .PropertyActionTypes
-            .Where(x => Properties.Any(p => p.Type.Name == x.PropertyName))
-            .Select(x => x.ActionName);
+        return GetAvailableActionTypes().Select(x => x.ActionName);
     }
 
     /// <summary>
@@ -61,20 +69,48 @@ public class Item
     /// <param name="actionName">Name of the action to be executed.</param>
     public void Act(string actionName)
     {
-        var appliableActions = ItemManager
-            .PropertyActionTypes
-            .Where(x => x.ActionName == actionName)
-            .Where(x => Properties.Any(p => p.Type.Name == x.PropertyName));
+        var applicableActions = GetAvailableActionTypes().Where(x => x.ActionName == actionName);
+        var changes = new Dictionary<bool, Property>();
 
-        foreach (var action in appliableActions)
+        foreach (var actionType in applicableActions)
         {
-            if (action.WillRemovePropertyOnAction)
+            if (actionType.RemovedProperty != null)
             {
-                var propertyToRemove = Properties.FirstOrDefault(x => x.Type.Name == action.PropertyName);
-                if (propertyToRemove != null)
+                var property = Properties.FirstOrDefault(x => x.Type.Name == actionType.RemovedProperty);
+                if (property != null)
                 {
-                    Properties.Remove(propertyToRemove);
+                    changes.Add(false, property);
                 }
+            }
+
+            if (actionType.AddedProperty != null)
+            {
+                var existingProperty = Properties.FirstOrDefault(x => x.Type.Name == actionType.AddedProperty);
+                var propertyType = ItemManager.PropertyTypes.FirstOrDefault(x => x.Name == actionType.AddedProperty);
+                if (propertyType != null)
+                {
+                    var newProperty = new Property(this, propertyType);
+                    if (newProperty != null)
+                    {
+                        changes.Add(true, newProperty);
+                        if (existingProperty != null)
+                        {
+                            changes.Add(false, existingProperty);
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach (var change in changes)
+        {
+            if (change.Key == true)
+            {
+                Properties.Add(change.Value);
+            }
+            else
+            {
+                Properties.Remove(change.Value);
             }
         }
     }

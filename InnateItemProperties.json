@@ -4,6 +4,10 @@
     "PropertyType": "Weapon"
   },
   {
+    "ItemType": "Dagger",
+    "PropertyType": "Throwable"
+  },
+  {
     "ItemType": "Club",
     "PropertyType": "Weapon"
   },

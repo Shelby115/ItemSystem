@@ -15,11 +15,6 @@
     "AddedProperty": "Shiny"
   },
   {
-    "SourceItem": "B",
-    "TargetItem": "C",
-    "AddedProperty": "P"
-  },
-  {
     "SourceItem": "Dagger",
     "TargetItem": "Dagger",
     "RemovedProperty": "Rope Connected"

@@ -36,26 +36,14 @@ public class ItemTests
     }
 
     [TestMethod]
-    public void Item_GetAvailableActions_FindsInnatePropertyActionAttack()
-    {
-        var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
-        Assert.AreEqual<int>(1, weapon.Properties.Count, "Starting property count.");
-        var actions = weapon.GetAvailableActions();
-        Assert.AreEqual<int>(1, actions.Count(), "Action count.");
-        Assert.AreEqual<string>("Attack", actions.First());
-    }
-
-    [TestMethod]
     public void Item_Act_AttackCanBeUsedTwice()
     {
         var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
-        Assert.AreEqual<int>(1, weapon.Properties.Count, "Starting property count.");
+        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Weapon"), "Item has the weapon property.");
         var actions = weapon.GetAvailableActions();
-        Assert.AreEqual<int>(1, actions.Count(), "Action count.");
-        Assert.AreEqual<string>("Attack", actions.First());
-        Assert.IsTrue(actions.Any(x => x == "Attack"), "The attack action is available.");
+        Assert.IsTrue(actions.Any(x => x == "Attack"), "Item has the attack action available.");
         weapon.Act("Attack");
-        Assert.IsTrue(actions.Any(x => x == "Attack"), "The attack action is available.");
+        Assert.IsTrue(actions.Any(x => x == "Attack"), "The attack action is still available after attacking.");
         weapon.Act("Attack");
     }
 
@@ -64,13 +52,56 @@ public class ItemTests
     {
         var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var rope = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
+        Assert.IsFalse(weapon.Properties.Any(x => x.Type.Name == "Rope Connected"), "Starts without rope connected.");
         weapon.UseWith(rope);
-        Assert.AreEqual<int>(2, weapon.Properties.Count, "Starting property count.");
-        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Rope Connected"));
+        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Rope Connected"), "Has rope connected after using it with rope.");
         var actions = weapon.GetAvailableActions();
         Assert.IsTrue(actions.Any(x => x == "Untie"), "The untie action is available.");
         weapon.Act("Untie");
         Assert.IsFalse(actions.Any(x => x == "Untie"), "The untie action is no longer available.");
+        Assert.IsFalse(weapon.Properties.Any(x => x.Type.Name == "Rope Connected"), "No longer has rope connected after using the untie action.");
+    }
+
+    [TestMethod]
+    public void Item_Act_ThrowRemovesThrowableAndAddsThrownProperty()
+    {
+        var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Throwable"));
+        Assert.IsFalse(weapon.Properties.Any(x => x.Type.Name == "Thrown"));
+        weapon.Act("Throw");
+        Assert.IsFalse(weapon.Properties.Any(x => x.Type.Name == "Throwable"));
+        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Thrown"));
+    }
+
+    [TestMethod]
+    public void Item_Act_ThrowTurnsThrowableIntoThrownAndPullRopeTurnsThrownIntoThrowable()
+    {
+        var dagger = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+
+        // Connect the rope to the dagger.
+        var rope = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
+        Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Rope Connected"), "Dagger does not start with a rope connected.");
+        dagger.UseWith(rope);
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Rope Connected"), "Dagger has rope connected after being used with rope.");
+
+        // Throw the dagger.
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Throwable"), "The dagger starts with the Throwable property.");
+        var actions = dagger.GetAvailableActions();
+        Assert.IsTrue(actions.Any(x => x == "Throw"), "The dagger has the Throw action available.");
+        Assert.IsFalse(actions.Any(x => x == "Pull Rope"), "The dagger should not have the Pull Rope action avialable if not thrown.");
+        dagger.Act("Throw");
+        Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Throwable"), "The dagger should no longer have the Throwable property.");
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Thrown"), "The dagger should have the Thrown property.");
+        actions = dagger.GetAvailableActions();
+        Assert.IsTrue(actions.Any(x => x == "Pull Rope"), "The Pull Rope action should be available after throwing the rope connected dagger.");
+
+        // Pull the rope.
+        dagger.Act("Pull Rope");
+        actions = dagger.GetAvailableActions();
+        Assert.IsFalse(actions.Any(x => x == "Pull Rope"), "After pulling the rope the dagger should no longer have the Pull Rope action available.");
+        Assert.IsTrue(actions.Any(x => x == "Throw"), "After pulling the rope the dagger should have the Throw action available.");
+        Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Thrown"), "After pulling the rope the dagger should no longer have the Thrown property.");
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Throwable"), "After pulling the rope the dagger should have the Throwable property.");
     }
 
     [TestMethod]
@@ -102,13 +133,9 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count);
-        Assert.AreEqual<int>(0, targetItem.Properties.Count);
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
         sourceItem.UseWith(targetItem);
-        Assert.AreEqual<int>(2, sourceItem.Properties.Count);
-        Assert.AreEqual<int>(0, targetItem.Properties.Count);
-        var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
-        Assert.IsNotNull(property);
+        Assert.IsTrue(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
     }
 
     [TestMethod]
@@ -116,21 +143,14 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Starting source item property count.");
-        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Starting target item property count.");
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Poisoned"), "Source item did not start with the Poisoned property.");
         sourceItem.UseWith(targetItem);
-        Assert.AreEqual<int>(2, sourceItem.Properties.Count, "Source item property count.");
-        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
+        Assert.IsTrue(sourceItem.Properties.Any(x => x.Type.Name == "Poisoned"), "Source item has the Poisoned property after being used with Poison Vial.");
         var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Poisoned");
-        Assert.IsNotNull(property);
-        Assert.IsNotNull(property.Attributes, "Property attributes.");
-        Assert.AreEqual<int>(2, property.Attributes.Count, "Property attribute count.");
-        var numberOfUses = property.Attributes.FirstOrDefault(x => x.Type.Name == "Number of Uses");
-        Assert.IsNotNull(numberOfUses);
-        Assert.AreEqual<int>(1, numberOfUses.AttributeValue, "Number of uses value.");
-        var addedPoisonDamage = property.Attributes.FirstOrDefault(x => x.Type.Name == "Added Poison Damage");
-        Assert.IsNotNull(addedPoisonDamage);
-        Assert.AreEqual<int>(10, addedPoisonDamage.AttributeValue, "Added poison damage value.");
+        Assert.IsTrue(property.Attributes.Any(x => x.Type.Name == "Number of Uses"));
+        Assert.AreEqual<int>(1, property.Attributes.First(x => x.Type.Name == "Number of Uses").AttributeValue);
+        Assert.IsTrue(property.Attributes.Any(x => x.Type.Name == "Added Poison Damage"));
+        Assert.AreEqual<int>(10, property.Attributes.First(x => x.Type.Name == "Added Poison Damage").AttributeValue);
     }
 
     [TestMethod]
@@ -138,18 +158,16 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Starting source item property count.");
-        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Starting target item property count.");
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
         sourceItem.UseWith(targetItem);
-        Assert.AreEqual<int>(2, sourceItem.Properties.Count, "Source item property count.");
-        Assert.AreEqual<int>(0, targetItem.Properties.Count, "Target item property count.");
+        Assert.IsTrue(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
 
         var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
         Assert.IsNotNull(property);
 
         var anotherTargetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         sourceItem.UseWith(anotherTargetItem);
-        Assert.AreEqual<int>(1, sourceItem.Properties.Count, "Ending source item property count.");
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
     }
 
     [TestMethod]

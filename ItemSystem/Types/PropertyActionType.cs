@@ -6,14 +6,16 @@
 /// </summary>
 public class PropertyActionType
 {
-    public string PropertyName { get; }
+    public string[] PropertyNames { get; }
     public string ActionName { get; }
-    public bool WillRemovePropertyOnAction { get; }
+    public string RemovedProperty { get; }
+    public string AddedProperty { get; }
 
-    public PropertyActionType(string propertyName, string actionName, bool willRemovePropertyOnAction)
+    public PropertyActionType(string[] propertyNames, string actionName, string removedProperty, string addedProperty)
     {
-        PropertyName = propertyName;
+        PropertyNames = propertyNames;
         ActionName = actionName;
-        WillRemovePropertyOnAction = willRemovePropertyOnAction;
+        RemovedProperty = removedProperty;
+        AddedProperty = addedProperty;
     }
 }

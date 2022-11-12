@@ -5,6 +5,16 @@
     "AttributeTypes": []
   },
   {
+    "Name": "Throwable",
+    "Description": "can be thrown",
+    "AttributeTypes": []
+  },
+  {
+    "Name": "Thrown",
+    "Description": "has been thrown",
+    "AttributeTypes": []
+  },
+  {
     "Name": "Rope Connected",
     "Description": "connected to a rope",
     "AttributeTypes": []
