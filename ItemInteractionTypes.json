@@ -1,22 +1,28 @@
 [
   {
-    "SourceItem": "Dagger",
+    "SourceItemProperties": [ "Throwable" ],
+    "SourceItemPreventProperties": [ "Thrown" ],
     "TargetItem": "Rope",
+    "TargetItemPreventProperties": [ "Tied" ],
     "AddedProperty": "Rope Connected"
   },
   {
-    "SourceItem": "Dagger",
+    "SourceItemProperties": [ "Weapon" ],
+    "SourceItemPreventProperties": [ "Thrown" ],
     "TargetItem": "Poison Vial",
     "AddedProperty": "Poisoned"
   },
   {
-    "SourceItem": "Dagger",
+    "SourceItemProperties": [ "Weapon" ],
+    "SourceItemPreventProperties": [ "Thrown" ],
     "TargetItem": "Polish",
     "AddedProperty": "Shiny"
   },
   {
-    "SourceItem": "Dagger",
-    "TargetItem": "Dagger",
+    "SourceItemProperties": [ "Rope Connected" ],
+    "SourceItemPreventProperties": [ "Thrown" ],
+    "TargetItemProperties": [ "Weapon" ],
+    "TargetItemPreventProperties": [ "Thrown" ],
     "RemovedProperty": "Rope Connected"
   }
 ]

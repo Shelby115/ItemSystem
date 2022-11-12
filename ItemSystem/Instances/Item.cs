@@ -129,39 +129,63 @@ public class Item
     }
 
     /// <summary>
+    /// Filters the list of interactions to those that only apply to both the source item and target item.
+    /// </summary>
+    private static IEnumerable<InteractionType> GetInteractions(IEnumerable<InteractionType> interactions, Item sourceItem, Item targetItem)
+    {
+        var sourceInteractions = interactions
+            // Retrieve interactions where the item type matches or an item type is not required.
+            .Where(x => x.SourceItem == null || x.SourceItem == sourceItem.Type.Name)
+            // Retrieve interactions where the required source item properties match.
+            .Where(x => x.SourceItemProperties.Any() == false || x.SourceItemProperties.All(sip => sourceItem.Properties.Any(p => p.Type.Name == sip)))
+            // Retrieve interactions where there are no preventing item properties.
+            .Where(x => x.SourceItemPreventProperties.Any() == false || x.SourceItemPreventProperties.Any(sipp => sourceItem.Properties.Any(p => p.Type.Name == sipp)) == false);
+
+        // TL;DR - Repeat the same logic for the Target Item.
+        return sourceInteractions
+            // Retrieve interactions where the item type matches or an item type is not required.
+            .Where(x => x.TargetItem == null || x.TargetItem == targetItem.Type.Name)
+            // Retrieve interactions where the required source item properties match.
+            .Where(x => x.TargetItemProperties.Any() == false || x.TargetItemProperties.All(sip => targetItem.Properties.Any(p => p.Type.Name == sip)))
+            // Retrieve interactions where there are no preventing item properties.
+            .Where(x => x.TargetItemPreventProperties.Any() == false || x.TargetItemPreventProperties.Any(sipp => targetItem.Properties.Any(p => p.Type.Name == sipp)) == false);
+    }
+
+    /// <summary>
     /// Uses this item with another item in hopes of adding a property to this item through a special interaction (e.g., Polished Dagger, Poisoned Spear, etc).
     /// </summary>
     /// <param name="item">The target item to interact with this one.</param>
     public void UseWith(Item item)
     {
-        // See if it is a valid item interaction.
-        var interaction = ItemManager.InteractionTypes.FirstOrDefault(x => x.SourceItem == Type.Name && x.TargetItem == item.Type.Name);
-        if (interaction == null) { return; }
-
-        if (interaction.AddedProperty != null)
+        // Retrieve a list of valid interactions.
+        var interactions = GetInteractions(ItemManager.InteractionTypes, this, item);
+        foreach (var interaction in interactions)
         {
-            // Find the resulting item property.
-            var addedProperty = ItemManager.PropertyTypes.FirstOrDefault(x => x.Name == interaction.AddedProperty);
-            if (addedProperty != null)
+            if (interaction.AddedProperty != null)
             {
-                // Check if it already exists, if it does remove it before adding it again.
-                var sourceItemProperty = Properties.FirstOrDefault(x => x.Type.Name == interaction.AddedProperty);
-                if (sourceItemProperty != null)
+                // Find the resulting item property.
+                var addedProperty = ItemManager.PropertyTypes.FirstOrDefault(x => x.Name == interaction.AddedProperty);
+                if (addedProperty != null)
                 {
-                    Properties.Remove(sourceItemProperty);
+                    // Check if it already exists, if it does remove it before adding it again.
+                    var sourceItemProperty = Properties.FirstOrDefault(x => x.Type.Name == interaction.AddedProperty);
+                    if (sourceItemProperty != null)
+                    {
+                        Properties.Remove(sourceItemProperty);
+                    }
+
+                    // Add the property from the interaction.
+                    Properties.Add(new Property(this, addedProperty));
                 }
-
-                // Add the property from the interaction.
-                Properties.Add(new Property(this, addedProperty));
             }
-        }
 
-        if (interaction.RemovedProperty != null)
-        {
-            var propertyToRemove = Properties.FirstOrDefault(x => x.Type.Name == interaction.RemovedProperty);
-            if (propertyToRemove != null)
+            if (interaction.RemovedProperty != null)
             {
-                Properties.Remove(propertyToRemove);
+                var propertyToRemove = Properties.FirstOrDefault(x => x.Type.Name == interaction.RemovedProperty);
+                if (propertyToRemove != null)
+                {
+                    Properties.Remove(propertyToRemove);
+                }
             }
         }
 

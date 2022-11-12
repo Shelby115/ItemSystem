@@ -80,6 +80,9 @@ public class ItemTests
 
         // Connect the rope to the dagger.
         var rope = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
+        Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Throwable"), "Dagger should start with the Throwable property.");
+        Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Thrown"), "Dagger should not start with the Thrown property.");
+        Assert.IsFalse(rope.Properties.Any(x => x.Type.Name == "Tied"), "Rope should not start with the Tied property.");
         Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Rope Connected"), "Dagger does not start with a rope connected.");
         dagger.UseWith(rope);
         Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Rope Connected"), "Dagger has rope connected after being used with rope.");
@@ -180,16 +183,20 @@ public class ItemTests
     {
         var sourceItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
         var targetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Rope"));
-        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have Rope Connected to start.");
         sourceItem.UseWith(targetItem);
-        Assert.IsTrue(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
+        Assert.IsTrue(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item has Rope Connected after using it with a rope.");
 
         var property = sourceItem.Properties.FirstOrDefault(x => x.Type.Name == "Rope Connected");
         Assert.IsNotNull(property);
 
-        var anotherTargetItem = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
-        sourceItem.UseWith(anotherTargetItem);
-        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item does not have rope connected to start.");
+        Assert.IsTrue(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item should have the Rope Connected property.");
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Thrown"), "Source item should not have the Thrown property.");
+        var weapon = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+        Assert.IsTrue(weapon.Properties.Any(x => x.Type.Name == "Weapon"), "The weapon should start with the Weapon property.");
+        Assert.IsFalse(weapon.Properties.Any(x => x.Type.Name == "Thrown"), "The weapon should not start with the Thrown property.");
+        sourceItem.UseWith(weapon);
+        Assert.IsFalse(sourceItem.Properties.Any(x => x.Type.Name == "Rope Connected"), "Source item no longer has rope after using it with another weapon.");
     }
 
     [TestMethod]
