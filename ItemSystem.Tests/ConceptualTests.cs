@@ -85,6 +85,12 @@ namespace ItemSystem.Tests
             // The original intent was that Use() would use the item (e.g., Drink a healing potion, attack with a weapon, etc).
             //  However, this is less flexible than the Act() function would be, where we can have a "Drink" action for a potion and an "Attack" action for a weapon.
             //  Perhaps the best course here is to absolve the Use() function into a Use action and have the action system handle property and attribute interactions.
+
+            // My idea at the moment is to have layers to the Attack action if it were to be used in a game.
+            // For example,
+            //  The weapon's Attack action would be called and it would return weapon information like damage attributes (e.g., weapon damage, additional poison damage, or additional elemental damage)
+            //  This damage information would then be passed up to the character who would use these weapon values in combination with their own stats to determine their damage, hit chance, etc.
+            //  From there the target's defensive statistics would be taken into account with the attacking character's stats to determine end-result damage.
         }
     }
 }
