@@ -54,5 +54,37 @@ namespace ItemSystem.Tests
             Assert.IsFalse(dagger.GetAvailableActions().Any(x => x == "Throw"));
             Assert.IsFalse(dagger.GetAvailableActions().Any(x => x == "Pull Rope"));
         }
+
+        [TestMethod]
+        public void Conceptual_PoisonedDagger_Weapon()
+        {
+            var dagger = new Item(ItemManager.ItemTypes.First(x => x.Name == "Dagger"));
+
+            // The dagger should have the Attack and Throw actions available by default.
+            Assert.IsTrue(dagger.GetAvailableActions().Any(x => x == "Attack"));
+            Assert.IsTrue(dagger.GetAvailableActions().Any(x => x == "Throw"));
+
+            // The dagger should not be poisoned by default.
+            Assert.IsFalse(dagger.Properties.Any(x => x.Type.Name == "Poisoned"));
+
+            // Using the poison vial with the dagger should make it poisoned.
+            var poison = new Item(ItemManager.ItemTypes.First(x => x.Name == "Poison Vial"));
+            dagger.UseWith(poison);
+            Assert.IsTrue(dagger.Properties.Any(x => x.Type.Name == "Poisoned"));
+
+            // Attack and Throw should still be available once the dagger has been poisoned.
+            Assert.IsTrue(dagger.GetAvailableActions().Any(x => x == "Attack"));
+            Assert.IsTrue(dagger.GetAvailableActions().Any(x => x == "Throw"));
+
+            // TODO: There should be some sort of system for getting action relevant details.
+            // For example,
+            //  Attacking with a normal dagger should give us weapon damage information.
+            //  Attacking with a poinson dagger should give us weapon damage + poison damage information.
+
+            // TODO: The Use() item property perhaps should be reconsidered.
+            // The original intent was that Use() would use the item (e.g., Drink a healing potion, attack with a weapon, etc).
+            //  However, this is less flexible than the Act() function would be, where we can have a "Drink" action for a potion and an "Attack" action for a weapon.
+            //  Perhaps the best course here is to absolve the Use() function into a Use action and have the action system handle property and attribute interactions.
+        }
     }
 }
