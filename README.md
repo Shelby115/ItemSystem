@@ -31,3 +31,6 @@ These entities are instances of type entities. They generally have one or more t
 8. ~~Ability to transform one property into another property upon interaction (e.g., Throw can be transformed into Thrown).~~
 9. ~~Ability to require multiple property requirements for an action (e.g., "Rope Connected" and "Thrown" allows for "Pull Rope Back").~~
 10. ~~Ability for a property to prevent an action (e.g., The thrown property would prevent using the Attack action with that item).~~
+11. Ability to get action relevant details when Act() is called (e.g., Get weapon damage when using a dagger vs getting weapon and poison damage when using a poisoned dagger).
+12. Add the ability for an action to manipulate properties and attributes (e.g., Reduce the Number of Uses attribute on a property).
+13. Replace the Use() function with a Use action.
